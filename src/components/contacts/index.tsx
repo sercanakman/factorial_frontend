@@ -6,7 +6,7 @@ import api from '../../shared/api';
 import { IContact } from '../../shared/interfaces';
 import CreateUpdateContactDialog from './create-update-contact';
 import ContactList from './contact-list';
-import { ContactModes } from '../../shared/types';
+import { ViewMode } from '../../shared/types';
 
 type Props = {};
 
@@ -25,7 +25,7 @@ const Contacts: React.ComponentType<Props> = () => {
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [errors, setErrors] = useState<any>({});
-  const [mode, setMode] = useState<ContactModes>('list');
+  const [mode, setMode] = useState<ViewMode>('list');
   const [selectedContact, setSelectedContact] = useState<IContact | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Contacts: React.ComponentType<Props> = () => {
   }, [isLoading]);
 
   const openCreateUpdateContactDialog = useCallback(
-    (mode: ContactModes, contact?: IContact) => {
+    (mode: ViewMode, contact?: IContact) => {
       if (mode === 'update' && contact) {
         setSelectedContact(contact);
         setMode('update');

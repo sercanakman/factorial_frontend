@@ -1,1 +1,1 @@
-export type ContactModes = 'list' | 'update' | 'create'
+export type ViewMode = 'list' | 'update' | 'create'

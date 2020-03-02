@@ -6,34 +6,34 @@ import Grid from '@material-ui/core/Grid';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { IContact } from '../../shared/interfaces';
+import { IEvent } from '../../shared/interfaces';
 import { ViewMode } from '../../shared/types';
 
 type Props = {
     closeDialog: Function;
-    createContact: Function;
-    updateContact: Function;
-    contact?: IContact | null;
+    createEvent: Function;
+    updateEvent: Function;
+    event?: IEvent | null;
     mode: ViewMode
     errors: any
 }
 
-const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mode, contact, createContact, updateContact, errors}) => {
-  const [firstName, setFirstName] = useState<string>(contact ? contact.first_name : '')
-  const [lastName, setLastName] = useState<string>(contact ? contact.last_name : '')
-  const [email, setEmail] = useState<string>(contact ? contact.email : '')
-  const [phoneNumber, setPhoneNumber] = useState<string>(contact ? contact.phone_number : '')
+const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode, event, createEvent, updateEvent, errors}) => {
+  const [title, setTitle] = useState<string>(event ? event.title : '')
+  const [description, setDescription] = useState<string>(event ? event.description : '')
+  const [startDate, setStartDate] = useState<Date | string>(event ? event.start_date : '')
+  const [endDate, setEndDate] = useState<Date | string>(event ? event.end_date : '')
 
   useEffect(() => {
-    if (contact && mode === 'update') {
-      setFirstName(contact.first_name)
-      setLastName(contact.last_name)
-      setEmail(contact.email)
-      setPhoneNumber(contact.phone_number)
+    if (event && mode === 'update') {
+      setTitle(event.title)
+      setDescription(event.description)
+      setStartDate(event.start_date)
+      setEndDate(event.end_date)
     } else {
       resetForm();
     }
-  }, [contact, mode])
+  }, [event, mode])
 
   const handleClose = useCallback(() => {
     closeDialog();
@@ -41,46 +41,46 @@ const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mod
   }, [closeDialog]);
 
   const resetForm = useCallback(() => {
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPhoneNumber('')
+    setTitle('')
+    setDescription('')
+    setStartDate('')
+    setEndDate('')
   }, []);
 
   const getSaveActionCallback = useMemo(() => {
    if (mode === 'create') {
-     return createContact;
+     return createEvent;
    } else if (mode === 'update') {
-     return updateContact;
+     return updateEvent;
    }
 
    return () => {};
-  }, [mode, createContact, updateContact])
+  }, [mode, createEvent, updateEvent])
 
   const onSave = useCallback(async () => {
     getSaveActionCallback({
-      id: contact ? contact.id : '',
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      phone_number: phoneNumber
+      id: event ? event.id : '',
+      title: title,
+      description: description,
+      startDate,
+      phone_number: endDate
     })
-  }, [firstName, lastName, email, phoneNumber, getSaveActionCallback])
+  }, [title, description, startDate, endDate, getSaveActionCallback])
 
   return (
       <Dialog open={mode === 'create' || mode === 'update'} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Create Contact</DialogTitle>
+        <DialogTitle id="form-dialog-title">Create Event</DialogTitle>
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6}>
               <TextField
                 autoFocus
                 margin="dense"
-                id="first_name"
-                label="First Name"
+                id="title"
+                label="Title"
                 type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 fullWidth
               />
             </Grid>
@@ -88,11 +88,11 @@ const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mod
               <TextField
                 autoFocus
                 margin="dense"
-                id="last_name"
-                label="Last Name"
+                id="description"
+                label="Description"
                 type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 fullWidth
               />
             </Grid>
@@ -100,13 +100,13 @@ const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mod
               <TextField
                 autoFocus
                 margin="dense"
-                id="email"
-                label="Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                helperText={errors.email && errors.email !== '' ? 'E-mail has already been taken' : ''}
-                error={errors.email && errors.email !== '' ? true : false}
+                id="start_date"
+                label="Start Date"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                helperText={errors.startDate && errors.startDate !== '' ? 'E-mail has already been taken' : ''}
+                error={errors.startDate && errors.startDate !== '' ? true : false}
                 fullWidth
               />
             </Grid>
@@ -114,11 +114,11 @@ const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mod
               <TextField
                 autoFocus
                 margin="dense"
-                id="phone_number"
-                label="Phone Number"
-                type="phone"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                id="end_date"
+                label="End Date"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 fullWidth
               /> 
             </Grid> 
@@ -136,4 +136,4 @@ const CreateUpdateContactDialog: React.ComponentType<Props> = ({closeDialog, mod
   );
 }
 
-export default CreateUpdateContactDialog;
+export default CreateUpdateEventDialog;
