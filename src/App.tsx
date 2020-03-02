@@ -1,24 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from './components/layout/drawer';
+import Body from './components/layout/body';
+import Header from './components/layout/header';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
+import './App.scss';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+    },
+  }),
+);
 
 function App() {
+  const classes = useStyles();
+  const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
+  
+    const handleDrawerToggle = () => {
+      setMobileOpen(!mobileOpen);
+    };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>     
+        <CssBaseline />
+        <Header handleDrawerToggle={handleDrawerToggle} />
+        <Drawer open={mobileOpen} toggle={handleDrawerToggle} />
+        <Body />
     </div>
   );
 }
