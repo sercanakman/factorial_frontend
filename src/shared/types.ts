@@ -1,0 +1,1 @@
+export type ContactModes = 'list' | 'update' | 'create'
