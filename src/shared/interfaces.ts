@@ -22,3 +22,8 @@ export interface IEvent extends IDRecord, ITimestampedRecord {
     start_date: Date;
     end_date: Date;
 }
+
+export interface IMetric extends IDRecord, ITimestampedRecord {
+    name: string;
+    value: string;
+}
