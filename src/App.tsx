@@ -3,7 +3,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from './components/layout/drawer';
 import Body from './components/layout/body';
 import Header from './components/layout/header';
+import Contacts from './components/contacts';
+import Events from './components/events';
+import Metrics from './components/metrics';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 import './App.scss';
 
@@ -24,12 +32,29 @@ function App() {
     };
 
   return (
-    <div className={classes.root}>     
+    <Router>
+      <div className={classes.root}>   
         <CssBaseline />
         <Header handleDrawerToggle={handleDrawerToggle} />
         <Drawer open={mobileOpen} toggle={handleDrawerToggle} />
-        <Body />
-    </div>
+        <Body>
+          <Switch>
+            <Route path="/contacts">
+              <Contacts />
+            </Route>
+            <Route path="/events">
+              <Events />
+            </Route>
+            <Route path="/metrics">
+              <Metrics />
+            </Route>
+            <Route path="/">
+              <Contacts />
+            </Route>
+          </Switch>
+        </Body>
+      </div>
+    </Router>
   );
 }
 
