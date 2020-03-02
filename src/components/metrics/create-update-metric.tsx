@@ -69,7 +69,7 @@ const CreateUpdateMetricDialog: React.ComponentType<Props> = ({closeDialog, mode
                 autoFocus
                 margin="dense"
                 id="name"
-                label="Title"
+                label="Name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -81,7 +81,7 @@ const CreateUpdateMetricDialog: React.ComponentType<Props> = ({closeDialog, mode
                 autoFocus
                 margin="dense"
                 id="value"
-                label="Description"
+                label="Value"
                 type="text"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}

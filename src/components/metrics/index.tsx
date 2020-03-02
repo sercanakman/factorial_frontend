@@ -1,12 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Fab from '@material-ui/core/Fab';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import api from '../../shared/api';
 import { IMetric } from '../../shared/interfaces';
 import CreateUpdateMetricDialog from './create-update-metric';
 import MetricList from './metric-list';
-import { ViewMode } from '../../shared/types';
+import { ViewMode, TimeMode } from '../../shared/types';
+import { Grid } from '@material-ui/core';
 
 type Props = {};
 
@@ -16,7 +22,11 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       bottom: theme.spacing(2),
       right: theme.spacing(2)
-    }
+    },
+    formControl: {
+      width: '100%',
+      minWidth: 81,
+    },
   })
 );
 
@@ -26,6 +36,7 @@ const Metrics: React.ComponentType<Props> = () => {
   const [metrics, setMetrics] = useState<IMetric[]>([]);
   const [errors, setErrors] = useState<any>({});
   const [mode, setMode] = useState<ViewMode>('list');
+  const [timeMode, setTimeMode] = useState<TimeMode>('day');
   const [selectedMetric, setSelectedMetric] = useState<IMetric | null>(null);
 
   useEffect(() => {
@@ -111,20 +122,84 @@ const Metrics: React.ComponentType<Props> = () => {
     setMode('list')
   }, [])
 
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const getDateFieldType = useMemo(() => {
+    if (timeMode === 'day') {
+      return 'date'
+    }
+
+    return 'datetime-local'
+  }, [timeMode])
+
   const classes = useStyles();
 
   return (
     <div>
       <h2>Metrics</h2>
+      <Grid container>
+        <Grid item xs={4} style={{marginLeft: 'auto'}}>
+          <Grid container spacing={1}>
+            <Grid item xs={2}>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="mode-select-label">Mode</InputLabel>
+                <Select
+                  labelId="mode-select-label"
+                  id="mode-select"
+                  value={timeMode}
+                  onChange={(e: any) => setTimeMode(e.target.value)}
+                >
+                  <MenuItem value={'minute'}>Minutes</MenuItem>
+                  <MenuItem value={'hour'}>Hours</MenuItem>
+                  <MenuItem value={'day'}>Days</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={5}>
+              <TextField
+                  autoFocus
+                  id="start_date"
+                  label="Start Date"
+                  type={getDateFieldType}
+                  value={startDate}
+                  onChange={(e: any) => setStartDate(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                />
+            </Grid>
+            <Grid item xs={5}>
+              <TextField
+                  autoFocus
+                  id="end_date"
+                  label="End Date"
+                  type={getDateFieldType}
+                  value={endDate}
+                  inputProps={{
+                    min: startDate
+                  }}
+                  onChange={(e: any) => setEndDate(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       {isLoading && <p>Loading...</p>}
-      {!isLoading && (
+      {!isLoading && startDate !== '' && endDate !== '' && (
         <MetricList
           metrics={metrics}
-          deleteMetric={deleteMetric}
-          updateMetric={(metric: IMetric) =>
-            openCreateUpdateMetricDialog('update', metric)
-          }
+          startDate={startDate}
+          endDate={endDate}
+          mode={timeMode}
         />
+      )}
+      {!isLoading && (startDate === '' || endDate === '') && (
+        <p>Please select mode and time period for average results</p>
       )}
       <CreateUpdateMetricDialog
         closeDialog={closeDialog}

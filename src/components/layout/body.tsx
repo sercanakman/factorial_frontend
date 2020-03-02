@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       flexGrow: 1,
       padding: theme.spacing(3),
+      overflow: 'hidden',
     },
   }),
 );
