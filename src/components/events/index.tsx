@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Events: React.ComponentType<Props> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
-  const [events, setEvents] = useState<IEvent[]>([]);
+  const [events, setEvents] = useState<IEvent[] | any>([]);
   const [errors, setErrors] = useState<any>({});
   const [mode, setMode] = useState<ViewMode>('list');
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
@@ -59,7 +59,7 @@ const Events: React.ComponentType<Props> = () => {
     async (event: IEvent) => {
       try {
         const response = await api.delete(`/events/${event.id}`);
-        setEvents(events.filter(_event => _event.id !== event.id));
+        setEvents(events.filter((_event: IEvent) => _event.id !== event.id));
       } catch(error) {
 
       }
@@ -70,6 +70,7 @@ const Events: React.ComponentType<Props> = () => {
 
   const createEvent = useCallback(
     async (event: IEvent) => {
+      console.log('event', event)
       try {
         const response = await api.post('/events', event);
         setEvents([...events, response.data]);
@@ -86,7 +87,7 @@ const Events: React.ComponentType<Props> = () => {
     async (event: IEvent) => {
       try {
         const response = await api.patch(`/events/${event.id}`, event);
-        const updatedEvents = events.map(_event => {
+        const updatedEvents = events.map((_event: IEvent) => {
           if (_event.id === event.id) {
             return {
               ..._event,
@@ -114,7 +115,7 @@ const Events: React.ComponentType<Props> = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <h2>Events</h2>
       {isLoading && <p>Loading...</p>}
       {!isLoading && (
@@ -142,7 +143,7 @@ const Events: React.ComponentType<Props> = () => {
       >
         <AddIcon />
       </Fab>
-    </div>
+    </>
   );
 };
 

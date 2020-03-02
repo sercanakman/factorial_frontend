@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { IEvent } from '../../shared/interfaces';
 import { ViewMode } from '../../shared/types';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 type Props = {
     closeDialog: Function;
@@ -62,8 +63,8 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
       id: event ? event.id : '',
       title: title,
       description: description,
-      startDate,
-      phone_number: endDate
+      start_date: startDate,
+      end_date: endDate
     })
   }, [title, description, startDate, endDate, getSaveActionCallback])
 
@@ -72,7 +73,7 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
         <DialogTitle id="form-dialog-title">Create Event</DialogTitle>
         <DialogContent>
           <Grid container spacing={1}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <TextField
                 autoFocus
                 margin="dense"
@@ -84,7 +85,7 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <TextField
                 autoFocus
                 margin="dense"
@@ -96,7 +97,7 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
               <TextField
                 autoFocus
                 margin="dense"
@@ -105,12 +106,13 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                helperText={errors.startDate && errors.startDate !== '' ? 'E-mail has already been taken' : ''}
-                error={errors.startDate && errors.startDate !== '' ? true : false}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
               <TextField
                 autoFocus
                 margin="dense"
@@ -119,6 +121,9 @@ const CreateUpdateEventDialog: React.ComponentType<Props> = ({closeDialog, mode,
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 fullWidth
               /> 
             </Grid> 

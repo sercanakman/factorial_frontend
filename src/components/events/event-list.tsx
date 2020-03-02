@@ -1,22 +1,22 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Event from './event';
+import Grid from '@material-ui/core/Grid';
+import { Calendar, momentLocalizer } from 'react-big-calendar'
 import { IEvent } from '../../shared/interfaces';
+import moment from 'moment';
+
+const localizer = momentLocalizer(moment)
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
+      height: '100%',
+      padding: theme.spacing(2)
     },
     container: {
-      maxHeight: 440,
+      height: '100%',
     },
   }),
 );
@@ -31,49 +31,28 @@ type Props = {
 const EventList: React.ComponentType<Props> = ({events, deleteEvent, updateEvent}) => {
   const classes = useStyles();
 
+  const transformedEvents = useMemo(() => {
+
+    return events.map(event => ({
+      title: event.title,
+      desc: event.description,
+      start: event.start_date,
+      end: event.end_date
+    }));
+  }, [events])
+
   return (
     <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                key={'first_name'}
-                align={'left'}
-              >
-                Title
-              </TableCell>
-              <TableCell
-                key={'last_name'}
-                align={'left'}
-              >
-                Description
-              </TableCell>
-              <TableCell
-                key={'email'}
-                align={'left'}
-              >
-                Start Date
-              </TableCell>
-              <TableCell
-                key={'phone_number'}
-                align={'left'}
-              >
-                End Date
-              </TableCell>
-              <TableCell
-                key={'actions'}
-                align={'right'}
-                style={{ minWidth: '5rem' }}
-              >
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {events.map(event => <Event key={`event-${event.id}`} event={event} deleteEvent={deleteEvent} updateEvent={updateEvent} />)}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Grid container className={classes.container}>
+        <Grid item xs={12}>
+          <Calendar
+            localizer={localizer}
+            events={transformedEvents}
+            startAccessor="start"
+            endAccessor="end"
+          />
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

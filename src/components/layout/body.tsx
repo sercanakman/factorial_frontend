@@ -7,6 +7,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     toolbar: theme.mixins.toolbar,
     content: {
+      display: 'flex',
+      flexDirection: 'column',
       flexGrow: 1,
       padding: theme.spacing(3),
     },
