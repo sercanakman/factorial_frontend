@@ -11,44 +11,22 @@ import { drawerWidth } from '../../shared/constants';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
-      [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.up('sm')]: {
-        display: 'none',
-      },
+      zIndex: theme.zIndex.drawer + 1,
     },
   }),
 );
 
 type Props = {
-    handleDrawerToggle: Function
 }
 
-const Header: React.ComponentType<Props> = ({handleDrawerToggle}) => {
+const Header: React.ComponentType<Props> = () => {
     const classes = useStyles();
 
-    const onDrawerToggle = useCallback(() => {
-      handleDrawerToggle()
-    }, [handleDrawerToggle])
     return (
-        <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={onDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" noWrap>
-            Responsive drawer
+            Factorial App
           </Typography>
         </Toolbar>
       </AppBar>

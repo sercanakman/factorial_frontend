@@ -35,8 +35,8 @@ function App() {
     <Router>
       <div className={classes.root}>   
         <CssBaseline />
-        <Header handleDrawerToggle={handleDrawerToggle} />
-        <Drawer open={mobileOpen} toggle={handleDrawerToggle} />
+        <Header />
+        <Drawer />
         <Body>
           <Switch>
             <Route path="/contacts">

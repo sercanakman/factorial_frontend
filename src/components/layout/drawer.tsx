@@ -10,18 +10,16 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { NavLink } from "react-router-dom";
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
+      width: drawerWidth,
+      flexShrink: 0,
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
@@ -31,72 +29,35 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-    container?: any;
-    open: boolean;
-    toggle: Function
 }
 
-const Drawer: React.ComponentType<Props> = ({ container, open, toggle }) => {
+const Drawer: React.ComponentType<Props> = () => {
     const classes = useStyles();
-    const theme = useTheme();
 
-    const onDrawerClose = useCallback(() => {
-      toggle()
-    }, [open, toggle])
-  
-    const drawer = (
-      <div>
+    return (
+      <MuiDrawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
         <div className={classes.toolbar} />
-          <Divider />
-          <List>
-            <ListItem button key={'contacts'}>
+        <List>
+            <ListItem button key={'contacts'} component={NavLink} to={"/contacts"}>
               <ListItemIcon><ContactsIcon /></ListItemIcon>
               <ListItemText primary={'Contacts'} />
             </ListItem>
-            <ListItem button key={'events'}>
+            <ListItem button key={'events'} component={NavLink} to={"/events"}>
               <ListItemIcon><EventIcon /></ListItemIcon>
               <ListItemText primary={'Events'} />
             </ListItem>
-            <ListItem button key={'metrics'}>
+            <ListItem button key={'metrics'} component={NavLink} to={"/metrics"}>
               <ListItemIcon><AssessmentIcon /></ListItemIcon>
               <ListItemText primary={'Metrics'} />
             </ListItem>
         </List>
-      </div>
-    );
-
-    return (
-        <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <MuiDrawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={open}
-            onClose={onDrawerClose}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </MuiDrawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <MuiDrawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </MuiDrawer>
-        </Hidden>
-      </nav>
+      </MuiDrawer>
     )
 }
 
