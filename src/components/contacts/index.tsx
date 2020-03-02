@@ -57,8 +57,13 @@ const Contacts: React.ComponentType<Props> = () => {
 
   const deleteContact = useCallback(
     async (contact: IContact) => {
-      const response = await api.delete(`/contacts/${contact.id}`);
-      setContacts(contacts.filter(_contact => _contact.id !== contact.id));
+      try {
+        const response = await api.delete(`/contacts/${contact.id}`);
+        setContacts(contacts.filter(_contact => _contact.id !== contact.id));
+      } catch(error) {
+
+      }
+      
     },
     [contacts]
   );
@@ -101,6 +106,11 @@ const Contacts: React.ComponentType<Props> = () => {
     [contacts]
   );
 
+  const closeDialog = useCallback(() => {
+    setErrors({})
+    setMode('list')
+  }, [])
+
   const classes = useStyles();
 
   return (
@@ -117,7 +127,7 @@ const Contacts: React.ComponentType<Props> = () => {
         />
       )}
       <CreateUpdateContactDialog
-        closeDialog={() => setMode('list')}
+        closeDialog={closeDialog}
         createContact={createContact}
         updateContact={updateContact}
         contact={selectedContact}
